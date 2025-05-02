@@ -1,0 +1,153 @@
+<div class="admin-layout">
+    <aside class="sidebar">
+      <div class="logo-container">
+        <img src="assets/logo_ucentral.png" alt="Logo Universidad Central" class="logo" />
+        <h1 class="app-title">APP UCENTRAL</h1>
+        <div class="menu-dots">•••</div>
+      </div>
+      
+      <nav class="side-menu">
+        <ul>
+          <li class="menu-item">
+            <div class="icon-container">
+              <img src="assets/icono-reportes.svg" alt="Reportes" />
+            </div>
+            <span>Reportes</span>
+          </li>
+          <li class="menu-item" style="cursor: pointer;">
+            <a [routerLink]="['/admin/usuarios']" style="text-decoration: none; color: inherit;">
+              <div class="icon-container">
+                <img src="assets/icono-usuarios.svg" alt="Usuarios" />
+              </div>
+              <span>Gestión Usuarios</span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+    </aside>
+          
+    <!-- Contenido principal -->
+    <div class="editar-usuario-content">
+      <div class="contenedor-principal">
+        <div class="formulario-editar-usuario">
+          <h2>Editar Usuario</h2>
+          
+          <!-- Buscador de usuario si no hay ID -->
+          <div *ngIf="!usuarioId" class="buscador-usuario">
+            <p>Busca el usuario que deseas editar:</p>
+            <div class="campo-busqueda">
+              <input 
+                type="text" 
+                placeholder="Buscar por nombre, correo o ID" 
+                [(ngModel)]="terminoBusqueda"
+                (keyup.enter)="buscarUsuarios()" 
+              />
+              <button class="btn-buscar" (click)="buscarUsuarios()">Buscar</button>
+            </div>
+            
+            <div *ngIf="resultadosBusqueda.length > 0" class="resultados-busqueda">
+              <table>
+                <thead>
+                  <tr>
+                    <th>ID</th>
+                    <th>Nombre</th>
+                    <th>Correo</th>
+                    <th>Acciones</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let usuario of resultadosBusqueda">
+                    <td>{{ usuario.id_usuario || usuario.id }}</td>
+                    <td>{{ usuario.nombre }} {{ usuario.apellido || '' }}</td>
+                    <td>{{ usuario.correo_electronico || usuario.correo }}</td>
+                    <td>
+                      <button class="btn-editar" (click)="seleccionarUsuario(usuario.id_usuario || usuario.id)">
+                        Editar
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+            
+            <div *ngIf="busquedaRealizada && resultadosBusqueda.length === 0" class="no-resultados">
+              No se encontraron usuarios con ese criterio de búsqueda.
+            </div>
+          </div>
+          
+          <div class="loading-spinner" *ngIf="cargando">
+            <div class="spinner"></div>
+            <p>Cargando datos del usuario...</p>
+          </div>
+          
+          <form *ngIf="usuarioId && !cargando" [formGroup]="usuarioForm" (ngSubmit)="onSubmit()">
+            <div class="campo">
+              <label for="nombre">Nombre:</label>
+              <input type="text" id="nombre" formControlName="nombre" />
+              <div class="error-mensaje" *ngIf="usuarioForm.get('nombre')?.touched && usuarioForm.get('nombre')?.invalid">
+                El nombre es requerido
+              </div>
+            </div>
+  
+            <div class="campo">
+              <label for="apellidos">Apellidos:</label>
+              <input type="text" id="apellidos" formControlName="apellidos" />
+              <div class="error-mensaje" *ngIf="usuarioForm.get('apellidos')?.touched && usuarioForm.get('apellidos')?.invalid">
+                Los apellidos son requeridos
+              </div>
+            </div>
+  
+            <div class="campo">
+              <label for="correo">Correo Electrónico:</label>
+              <input type="email" id="correo" formControlName="correo" />
+              <div class="error-mensaje" *ngIf="usuarioForm.get('correo')?.touched && usuarioForm.get('correo')?.invalid">
+                Ingrese un correo electrónico válido
+              </div>
+            </div>
+  
+            <div class="campo">
+              <label for="telefono">Teléfono:</label>
+              <input type="text" id="telefono" formControlName="telefono" />
+              <div class="error-mensaje" *ngIf="usuarioForm.get('telefono')?.touched && usuarioForm.get('telefono')?.invalid">
+                Ingrese un número de teléfono válido
+              </div>
+            </div>
+  
+            <div class="campo">
+              <label for="id_ingenieria">ID Ingeniería:</label>
+              <input type="text" id="id_ingenieria" formControlName="id_ingenieria" />
+              <div class="error-mensaje" *ngIf="usuarioForm.get('id_ingenieria')?.touched && usuarioForm.get('id_ingenieria')?.invalid">
+                El ID de ingeniería es requerido
+              </div>
+            </div>
+  
+            <div class="campo">
+              <label for="rol">Rol:</label>
+              <select id="rol" formControlName="rol_id">
+                <option value="1">Administrador</option>
+                <option value="2">Gestor</option>
+                <option value="3">Estudiante</option>
+              </select>
+            </div>
+  
+            <div class="botones-accion">
+              <button type="button" class="btn-cancelar" (click)="cancelar()">Cancelar</button>
+              <button type="submit" class="btn-guardar" [disabled]="usuarioForm.invalid">Guardar Cambios</button>
+            </div>
+          </form>
+          
+          <div class="error-container" *ngIf="errorMensaje">
+            <p class="error-mensaje">{{ errorMensaje }}</p>
+          </div>
+          
+          <div class="exito-container" *ngIf="exitoMensaje">
+            <p class="exito-mensaje">{{ exitoMensaje }}</p>
+          </div>
+        </div>
+  
+        <div class="icono-usuario">
+          <img src="assets/actualizar-usuario.svg" alt="Editar usuario" />
+        </div>
+      </div>
+    </div>
+  </div>

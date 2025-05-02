@@ -1,0 +1,108 @@
+<div class="estudiantes-layout">
+  <aside class="sidebar">
+    <div class="logo-container">
+      <img src="assets/logo_ucentral.png" alt="Logo Universidad Central" class="logo" />
+      <h1 class="app-title">APP UCENTRAL</h1>
+      <div class="menu-dots">•••</div>
+    </div>
+    
+    <nav class="side-menu">
+      <ul>
+        <li class="menu-item">
+          <a [routerLink]="['/gestor']" style="text-decoration: none; color: inherit;">
+            <div class="icon-container">
+              <img src="assets/icono-dashboard.svg" alt="Dashboard" />
+            </div>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        <li class="menu-item active">
+          <a [routerLink]="['/gestor/estudiantes']" style="text-decoration: none; color: inherit;">
+            <div class="icon-container">
+              <img src="assets/icono-estudiantes.svg" alt="Estudiantes" />
+            </div>
+            <span>Estudiantes</span>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a [routerLink]="['/gestor/formularios']" style="text-decoration: none; color: inherit;">
+            <div class="icon-container">
+              <img src="assets/icono-formularios.svg" alt="Formularios" />
+            </div>
+            <span>Formularios</span>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a [routerLink]="['/gestor/reportes']" style="text-decoration: none; color: inherit;">
+            <div class="icon-container">
+              <img src="assets/icono-reportes.svg" alt="Reportes" />
+            </div>
+            <span>Reportes</span>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a [routerLink]="['/gestor/mensajes']" style="text-decoration: none; color: inherit;">
+            <div class="icon-container">
+              <img src="assets/icono-mensajes.svg" alt="Mensajes" />
+            </div>
+            <span>Mensajes</span>
+            <div class="badge" *ngIf="mensajesNoLeidos > 0">{{ mensajesNoLeidos }}</div>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="logout-btn" (click)="logout()">
+        <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+      </button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <h2 class="page-title">Lista de Estudiantes</h2>
+    
+    <div class="search-container">
+      <input type="text" [(ngModel)]="filtroNombre" placeholder="Buscar por nombre" class="search-input">
+      <button *ngIf="filtroNombre" (click)="filtroNombre=''" class="clear-search">×</button>
+    </div>
+    
+    <div class="estudiantes-cards">
+      <div class="estudiante-card" *ngFor="let estudiante of filtrarEstudiantes()">
+        <div class="estudiante-inicial" [style.backgroundColor]="getColorForLetra(estudiante.nombre.charAt(0))">
+          {{ estudiante.nombre.charAt(0).toUpperCase() }}
+        </div>
+        <div class="estudiante-info">
+          {{ estudiante.nombre }} {{ estudiante.apellido }}
+        </div>
+        <div class="estudiante-acciones">
+          <button class="accion-btn ver-btn" [routerLink]="['/gestor/estudiante', estudiante.id_estudiante]">
+            <i class="fas fa-eye"></i>
+          </button>
+          <button class="accion-btn mensaje-btn" [routerLink]="['/gestor/mensajes/nuevo', estudiante.id_estudiante]">
+            <i class="fas fa-comment-alt"></i>
+          </button>
+        </div>
+      </div>
+    </div>
+    
+    <div class="estado-vacio" *ngIf="!cargando && estudiantes.length === 0">
+      <p>No hay estudiantes registrados en el sistema.</p>
+    </div>
+    
+    <div class="cargando" *ngIf="cargando">
+      <div class="spinner"></div>
+      <p>Cargando estudiantes...</p>
+    </div>
+    
+    <div class="controles-flotantes">
+      <button class="btn-secundario" (click)="cargarEstudiantes()">Actualizar</button>
+    </div>
+    
+    <div class="errores" *ngIf="errores.length > 0">
+      <div class="error-mensaje" *ngFor="let error of errores">
+        {{ error }}
+      </div>
+    </div>
+  </main>
+</div>

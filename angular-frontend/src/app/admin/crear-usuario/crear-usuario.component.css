@@ -1,0 +1,279 @@
+/* Estilos generales */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* Texto de ayuda para campos */
+.helper-text {
+  font-size: 12px;
+  color: #666;
+  margin-top: 4px;
+  display: block;
+}
+
+body {
+  background-color: #f5f5f5;
+}
+
+/* Layout principal */
+.admin-layout {
+  display: flex;
+  height: 100vh;
+  background-color: #e6e8dc;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 265px;
+  background: white;
+  padding: 20px 0;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.05);
+}
+
+.logo-container {
+  display: flex;
+  align-items: center;
+  padding: 0 20px 20px 20px;
+  border-bottom: 1px solid #f0f0f0;
+  position: relative;
+}
+
+.logo {
+  width: 40px;
+  height: 40px;
+  margin-right: 10px;
+}
+
+.app-title {
+  font-size: 18px;
+  font-weight: bold;
+  color: #333;
+}
+
+.menu-dots {
+  position: absolute;
+  right: 20px;
+  font-size: 20px;
+  color: #333;
+  font-weight: bold;
+}
+
+/* Side Menu */
+.side-menu {
+  margin-top: 30px;
+}
+
+.side-menu ul {
+  list-style: none;
+  padding: 0;
+}
+
+.menu-item {
+  display: flex;
+  align-items: center;
+  padding: 15px 20px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.menu-item:hover {
+  background-color: #f5f5f5;
+}
+
+.icon-container {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+}
+
+.icon-container img {
+  width: 24px;
+  height: 24px;
+}
+
+.menu-item span {
+  font-size: 16px;
+  color: #333;
+}
+
+.menu-link {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+  width: 100%;
+}
+
+/* Contenido principal */
+.crear-usuario-content {
+  flex: 1;
+  padding: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-y: auto;
+}
+
+/* Contenedor del formulario e imagen */
+.contenedor-principal {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #eaf0ea;
+  border-radius: 30px;
+  padding: 40px;
+  width: 100%;
+  max-width: 1000px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+/* Título del formulario */
+.titulo-formulario {
+  font-size: 24px;
+  color: #333;
+  margin-bottom: 25px;
+  font-weight: 600;
+}
+
+/* Banner de error */
+.error-banner {
+  background-color: #ffebee;
+  color: #c62828;
+  padding: 12px 16px;
+  border-radius: 4px;
+  margin-bottom: 20px;
+  border-left: 4px solid #c62828;
+  font-size: 14px;
+}
+
+/* Loading text */
+.loading-text {
+  color: #666;
+  font-size: 13px;
+  font-style: italic;
+  margin-top: 5px;
+}
+
+/* Formulario */
+.formulario-crear-usuario {
+  flex: 1;
+  margin-right: 40px;
+}
+
+.campo {
+  margin-bottom: 20px;
+}
+
+.campo label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #444;
+}
+
+.campo input, .campo select {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  font-size: 14px;
+  background-color: white;
+  transition: border-color 0.3s, box-shadow 0.3s;
+}
+
+.campo input:focus, .campo select:focus {
+  outline: none;
+  border-color: #888;
+  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.05);
+}
+
+/* Mensajes de error */
+.error-mensaje {
+  color: #e53935;
+  font-size: 12px;
+  margin-top: 5px;
+  font-weight: 500;
+}
+
+/* Botón */
+button[type='submit'] {
+  width: 100%;
+  padding: 14px;
+  background-color: #2d2d2d;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  margin-top: 25px;
+  font-weight: 600;
+  transition: background-color 0.2s;
+}
+
+button[type='submit']:hover:not([disabled]) {
+  background-color: #444;
+}
+
+button[type='submit']:disabled {
+  background-color: #999;
+  cursor: not-allowed;
+}
+
+/* Imagen usuario */
+.icono-usuario {
+  flex: 0.7;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.icono-usuario img {
+  width: 230px;
+  max-width: 100%;
+}
+
+/* Responsive */
+@media (max-width: 992px) {
+  .contenedor-principal {
+    flex-direction: column;
+    padding: 30px;
+  }
+  
+  .formulario-crear-usuario {
+    margin-right: 0;
+    margin-bottom: 30px;
+    width: 100%;
+  }
+  
+  .icono-usuario {
+    order: -1;
+    margin-bottom: 30px;
+  }
+}
+
+@media (max-width: 768px) {
+  .admin-layout {
+    flex-direction: column;
+  }
+  
+  .sidebar {
+    width: 100%;
+    padding: 15px;
+  }
+  
+  .crear-usuario-content {
+    padding: 20px;
+  }
+  
+  .contenedor-principal {
+    padding: 20px;
+  }
+}

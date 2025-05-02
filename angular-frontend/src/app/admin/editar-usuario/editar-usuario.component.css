@@ -1,0 +1,350 @@
+/* Layout general */
+.admin-layout {
+    display: flex;
+    min-height: 100vh;
+    background-color: #dfe5d4;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  }
+  
+  /* Menú lateral - reutilizar estilos de crear-usuario.component.css */
+  .sidebar {
+    width: 265px;
+    background-color: white;
+    display: flex;
+    flex-direction: column;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    padding: 20px 0;
+  }
+  
+  .logo-container {
+    display: flex;
+    align-items: center;
+    padding: 0 20px 20px;
+    border-bottom: 1px solid #f0f0f0;
+    position: relative;
+  }
+  
+  .logo {
+    width: 40px;
+    height: 40px;
+    margin-right: 10px;
+  }
+  
+  .app-title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .menu-dots {
+    position: absolute;
+    right: 20px;
+    font-size: 20px;
+    color: #333;
+    font-weight: bold;
+  }
+  
+  .side-menu {
+    margin-top: 30px;
+  }
+  
+  .side-menu ul {
+    list-style: none;
+    padding: 0;
+  }
+  
+  .menu-item {
+    display: flex;
+    align-items: center;
+    padding: 15px 20px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  
+  .menu-item:hover {
+    background-color: #f5f5f5;
+  }
+  
+  .icon-container {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+  }
+  
+  .icon-container img {
+    width: 24px;
+    height: 24px;
+  }
+  
+  .menu-item span {
+    font-size: 16px;
+    color: #333;
+  }
+  
+  /* Contenido principal */
+  .editar-usuario-content {
+    flex: 1;
+    padding: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  /* Contenedor del formulario e imagen */
+  .contenedor-principal {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #eaf0ea;
+    border-radius: 40px;
+    padding: 40px;
+    width: 100%;
+    max-width: 1000px;
+  }
+  
+  /* Formulario */
+  .formulario-editar-usuario {
+    flex: 1;
+    margin-right: 40px;
+  }
+  
+  .formulario-editar-usuario h2 {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 24px;
+  }
+  
+  .campo {
+    margin-bottom: 20px;
+  }
+  
+  .campo label {
+    display: block;
+    font-weight: bold;
+    margin-bottom: 5px;
+  }
+  
+  .campo input, .campo select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+    font-size: 14px;
+  }
+  
+  .error-mensaje {
+    color: #d32f2f;
+    font-size: 12px;
+    margin-top: 5px;
+  }
+  
+  /* Botones */
+  .botones-accion {
+    display: flex;
+    gap: 10px;
+    margin-top: 20px;
+  }
+  
+  .btn-cancelar {
+    padding: 12px;
+    background-color: #f5f5f5;
+    color: #333;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    flex: 1;
+  }
+  
+  .btn-guardar {
+    padding: 12px;
+    background-color: #2d2d2d;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 16px;
+    flex: 1;
+  }
+  
+  .btn-guardar:hover {
+    background-color: #444;
+  }
+  
+  .btn-guardar:disabled {
+    background-color: #999;
+    cursor: not-allowed;
+  }
+  
+  /* Buscador */
+  .buscador-usuario {
+    margin-bottom: 25px;
+  }
+  
+  .buscador-usuario p {
+    margin-bottom: 15px;
+    color: #555;
+  }
+  
+  .campo-busqueda {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+  }
+  
+  .campo-busqueda input {
+    flex: 1;
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+  }
+  
+  .btn-buscar {
+    padding: 10px 20px;
+    background-color: #2d2d2d;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  
+  .resultados-busqueda {
+    margin-bottom: 20px;
+  }
+  
+  .resultados-busqueda table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  .resultados-busqueda th, .resultados-busqueda td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+  
+  .resultados-busqueda th {
+    background-color: #f5f5f5;
+    font-weight: 600;
+  }
+  
+  .btn-editar {
+    padding: 8px 12px;
+    background-color: #2196f3;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .no-resultados {
+    padding: 15px;
+    background-color: #f5f5f5;
+    border-radius: 6px;
+    text-align: center;
+    color: #666;
+  }
+  
+  /* Imagen usuario */
+  .icono-usuario {
+    flex: 0.7;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .icono-usuario img {
+    width: 230px;
+    max-width: 100%;
+  }
+  
+  /* Spinner de carga */
+  .loading-spinner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+  }
+  
+  .spinner {
+    width: 40px;
+    height: 40px;
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #333;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+    margin-bottom: 15px;
+  }
+  
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+  
+  /* Error container */
+  .error-container {
+    margin-top: 20px;
+    padding: 10px 15px;
+    background-color: #ffebee;
+    border-radius: 4px;
+  }
+  
+  /* Éxito container */
+  .exito-container {
+    margin-top: 20px;
+    padding: 10px 15px;
+    background-color: #e8f5e9;
+    border-radius: 4px;
+  }
+  
+  .exito-mensaje {
+    color: #2e7d32;
+  }
+  
+  /* Responsive */
+  @media (max-width: 992px) {
+    .contenedor-principal {
+      flex-direction: column;
+      padding: 30px;
+    }
+    
+    .formulario-editar-usuario {
+      margin-right: 0;
+      margin-bottom: 30px;
+      width: 100%;
+    }
+    
+    .icono-usuario {
+      margin-top: 20px;
+    }
+  }
+  
+  @media (max-width: 768px) {
+    .admin-layout {
+      flex-direction: column;
+      height: auto;
+    }
+    
+    .sidebar {
+      width: 100%;
+    }
+    
+    .editar-usuario-content {
+      padding: 20px;
+    }
+    
+    .contenedor-principal {
+      padding: 20px;
+    }
+    
+    .campo-busqueda {
+      flex-direction: column;
+    }
+    
+    .btn-buscar {
+      width: 100%;
+    }
+  }

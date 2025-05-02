@@ -1,0 +1,8 @@
+<h2>Restablecer Contraseña</h2>
+<form (ngSubmit)="cambiar()">
+  <input [(ngModel)]="nueva" name="nueva" type="password" placeholder="Nueva contraseña" required />
+  <input [(ngModel)]="repetir" name="repetir" type="password" placeholder="Repetir contraseña" required />
+  <button type="submit">Guardar</button>
+</form>
+<p *ngIf="mensaje">{{ mensaje }}</p>
+<p *ngIf="error" style="color:red">{{ error }}</p>

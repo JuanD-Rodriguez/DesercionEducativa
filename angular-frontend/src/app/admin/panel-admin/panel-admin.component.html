@@ -1,0 +1,51 @@
+<div class="admin-layout">
+  <aside class="sidebar">
+    <div class="logo-container">
+      <img src="assets/logo_ucentral.png" alt="Logo Universidad Central" class="logo" />
+      <h1 class="app-title">APP UCENTRAL</h1>
+      <div class="menu-dots">•••</div>
+    </div>
+    
+    <nav class="side-menu">
+      <ul>
+        <li class="menu-item">
+          <div class="icon-container">
+            <img src="assets/icono-reportes.svg" alt="Reportes" />
+          </div>
+          <span>Reportes</span>
+        </li>
+        <li class="menu-item" style="cursor: pointer;">
+          <a [routerLink]="['/admin/usuarios']" style="text-decoration: none; color: inherit;">
+            <div class="icon-container">
+              <img src="assets/icono-usuarios.svg" alt="Usuarios" />
+            </div>
+            <span>Gestión Usuarios</span>
+          </a>
+        </li>
+        
+      </ul>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <header class="top-bar">
+      <div class="search-container">
+        <input type="text" placeholder="Search" />
+        <button class="search-icon">
+          <i class="search-icon-img">⌕</i>
+        </button>
+      </div>
+      <div class="top-bar-right">
+        <button class="notification-button">
+          <i class="notification-icon">🔔</i>
+        </button>
+        <img src="assets/avatar.png" class="avatar" alt="Avatar" />
+      </div>
+    </header>
+
+    <section class="welcome-box">
+      <h2>Bienvenid@ Administrador</h2>
+      <p>En esta aplicación, podrás acceder a los informes detallados sobre los estudiantes que han desertado. Explora los reportes para conocer las estadísticas y análisis de la deserción en nuestra institución.</p>
+    </section>
+  </main>
+</div>

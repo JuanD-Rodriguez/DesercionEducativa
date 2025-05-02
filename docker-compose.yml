@@ -1,0 +1,52 @@
+services:
+  mysql:
+    image: mysql:8.0
+    container_name: mysql-desercion
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: rootpassword
+      MYSQL_DATABASE: desercion_db
+      MYSQL_USER: flask_user
+      MYSQL_PASSWORD: flaskpass
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "flask_user", "-pflaskpass"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build: ./flask-backend
+    container_name: flask-backend
+    restart: always
+    depends_on:
+      mysql:
+        condition: service_healthy
+    ports:
+      - "5000:5000"
+    environment:
+      DATABASE_URL: "mysql+mysqlconnector://flask_user:flaskpass@mysql:3306/desercion_db"
+      FLASK_ENV: development
+    volumes:
+      - ./flask-backend:/app
+
+  frontend:
+    build: ./angular-frontend
+    container_name: angular-frontend
+    restart: always
+    depends_on:
+      - backend
+    ports:
+      - "4200:4200"
+    volumes:
+      - ./angular-frontend:/app
+      - /app/node_modules
+    command: ["ng", "serve", "--host", "0.0.0.0", "--port", "4200"]
+    tty: true
+    stdin_open: true
+
+volumes:
+  mysql_data:

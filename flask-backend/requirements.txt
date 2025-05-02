@@ -1,0 +1,12 @@
+flask
+flask-cors
+flask-restful
+flask-sqlalchemy
+mysql-connector-python
+python-dotenv
+flask-jwt-extended
+scikit-learn
+pandas
+numpy
+gunicorn
+pymysql

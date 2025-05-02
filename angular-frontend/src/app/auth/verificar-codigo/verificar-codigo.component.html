@@ -1,0 +1,31 @@
+<div class="login-wrapper">
+    <div class="login-box">
+      <div class="login-left">
+        <h2>Verificar Código</h2>
+        <p class="instruccion">Ingresa el código de verificación que te hemos enviado a tu correo electrónico.</p>
+        
+        <div *ngIf="!codigoVerificado">
+          <label for="codigo">Código de verificación</label>
+          <input type="text" id="codigo" name="codigo" [(ngModel)]="codigo" placeholder="Ingresa el código de 6 dígitos" required>
+          
+          <button type="submit" (click)="verificarCodigo()">Verificar Código</button>
+          
+          <p *ngIf="error" class="mensaje-error">{{ error }}</p>
+        </div>
+        
+        <div *ngIf="codigoVerificado" class="mensaje-exito">
+          <p>Código verificado correctamente. Ahora puedes crear una nueva contraseña.</p>
+          <button type="button" (click)="irANuevaContrasena()">Continuar</button>
+        </div>
+      </div>
+      <div class="login-right">
+        <div class="logo-container">
+          <img src="assets/logo_ucentral.png" alt="Universidad Central" class="logo" />
+          <div class="university-name">
+            <h1>UNIVERSIDAD<br>CENTRAL</h1>
+            <p>Vigilada Mineducación</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>

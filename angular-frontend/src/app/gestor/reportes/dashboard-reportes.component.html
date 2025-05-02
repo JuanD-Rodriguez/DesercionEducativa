@@ -1,0 +1,143 @@
+<!-- src/app/gestor/reportes/dashboard-reportes.component.html -->
+<div class="gestor-layout">
+    <aside class="sidebar">
+      <!-- Sidebar similar al panel de gestor -->
+      <!-- ... -->
+    </aside>
+  
+    <main class="main-content">
+      <header class="page-header">
+        <h1>Dashboard de Reportes</h1>
+        <div class="date-selector">
+          <label for="periodo">Período:</label>
+          <select id="periodo">
+            <option value="2025-1">2025-1</option>
+            <option value="2024-2">2024-2</option>
+            <option value="2024-1">2024-1</option>
+          </select>
+        </div>
+      </header>
+  
+      <div class="loading-spinner" *ngIf="cargando">
+        <div class="spinner"></div>
+        <p>Cargando datos...</p>
+      </div>
+  
+      <div class="dashboard-content" *ngIf="!cargando">
+        <!-- Estadísticas generales -->
+        <div class="stats-cards">
+          <div class="stat-card">
+            <div class="stat-icon">👥</div>
+            <div class="stat-content">
+              <h3>Total Estudiantes</h3>
+              <p class="stat-value">{{ estadisticasGenerales.total_estudiantes || 0 }}</p>
+            </div>
+          </div>
+          
+          <div class="stat-card warning">
+            <div class="stat-icon">⚠️</div>
+            <div class="stat-content">
+              <h3>Alto Riesgo</h3>
+              <p class="stat-value">{{ estadisticasGenerales.estudiantes_alto_riesgo || 0 }}</p>
+              <p class="stat-subtext">{{ estadisticasGenerales.porcentaje_alto_riesgo || 0 }}% del total</p>
+            </div>
+          </div>
+          
+          <div class="stat-card info">
+            <div class="stat-icon">📊</div>
+            <!-- Continuación de src/app/gestor/reportes/dashboard-reportes.component.html -->
+         <div class="stat-content">
+            <h3>Riesgo Promedio</h3>
+            <p class="stat-value">{{ (estadisticasGenerales.riesgo_promedio * 100).toFixed(1) || 0 }}%</p>
+          </div>
+        </div>
+        
+        <div class="stat-card success">
+          <div class="stat-icon">📝</div>
+          <div class="stat-content">
+            <h3>Formularios Completados</h3>
+            <p class="stat-value">{{ estadisticasGenerales.total_respuestas_formularios || 0 }}</p>
+          </div>
+        </div>
+      </div>
+ 
+      <!-- Gráficos y tablas -->
+      <div class="report-container">
+        <div class="report-card">
+          <h3>Factores de Deserción</h3>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Factor</th>
+                  <th>Cantidad</th>
+                  <th>Porcentaje</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let factor of factoresDesercion">
+                  <td>{{ factor.factor }}</td>
+                  <td>{{ factor.cantidad }}</td>
+                  <td>{{ calcularPorcentaje(factor.cantidad, estadisticasGenerales.total_estudiantes) }}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+ 
+        <div class="report-card">
+          <h3>Deserción por Ingeniería</h3>
+          <div class="table-container">
+            <table>
+              <thead>
+                <tr>
+                  <th>Programa</th>
+                  <th>Total Estudiantes</th>
+                  <th>Alto Riesgo</th>
+                  <th>Porcentaje</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let ing of desercionPorIngenieria">
+                  <td>{{ ing.nombre_ingenieria }}</td>
+                  <td>{{ ing.total_estudiantes }}</td>
+                  <td>{{ ing.estudiantes_alto_riesgo }}</td>
+                  <td>
+                    <div class="progress-bar">
+                      <div class="progress" [style.width.%]="ing.porcentaje_alto_riesgo"></div>
+                      <span>{{ ing.porcentaje_alto_riesgo }}%</span>
+                    </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+ 
+      <!-- Sección de acciones -->
+      <div class="actions-section">
+        <h3>Acciones Recomendadas</h3>
+        <div class="action-cards">
+          <div class="action-item">
+            <h4>Contactar Estudiantes en Riesgo</h4>
+            <p>Hay {{ estadisticasGenerales.estudiantes_alto_riesgo || 0 }} estudiantes con alto riesgo de deserción que requieren atención inmediata.</p>
+            <button class="action-button" [routerLink]="['/gestor/estudiantes/alto-riesgo']">Ver Estudiantes</button>
+          </div>
+          
+          <div class="action-item">
+            <h4>Revisar Formularios Pendientes</h4>
+            <p>Revisa los formularios de deserción completados recientemente para identificar patrones comunes.</p>
+            <button class="action-button" [routerLink]="['/gestor/formularios']">Ver Formularios</button>
+          </div>
+          
+          <div class="action-item">
+            <h4>Ejecutar Predicción Masiva</h4>
+            <p>Actualiza el análisis predictivo para todos los estudiantes matriculados este semestre.</p>
+            <button class="action-button" (click)="ejecutarPrediccionMasiva()">Ejecutar Predicción</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+ </div>

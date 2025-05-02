@@ -1,0 +1,42 @@
+/* Reutilizamos los estilos básicos definidos en recuperar.component.css */
+.instruccion {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 30px;
+    line-height: 1.5;
+  }
+  
+  .mensaje-error {
+    color: #d32f2f;
+    margin-top: 15px;
+    font-size: 14px;
+  }
+  
+  .mensaje-exito {
+    color: #2e7d32;
+    margin-top: 15px;
+    font-size: 14px;
+  }
+  
+  /* Estilos adicionales específicos */
+  h2 {
+    margin-bottom: 20px;
+    color: #333;
+  }
+  
+  button {
+    width: 100%;
+    padding: 14px;
+    background-color: #333;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-weight: bold;
+    margin-top: 20px;
+    transition: background-color 0.2s;
+  }
+  
+  button:hover {
+    background-color: #444;
+  }

@@ -1,0 +1,112 @@
+<div class="admin-layout">
+  <aside class="sidebar">
+    <div class="logo-container">
+      <img src="assets/logo_ucentral.png" alt="Logo Universidad Central" class="logo" />
+      <h1 class="app-title">APP UCENTRAL</h1>
+      <div class="menu-dots">•••</div>
+    </div>
+    
+    <nav class="side-menu">
+      <ul>
+        <li class="menu-item">
+          <div class="icon-container">
+            <img src="assets/icono-reportes.svg" alt="Reportes" />
+          </div>
+          <span>Reportes</span>
+        </li>
+        <li class="menu-item" style="cursor: pointer;">
+          <a [routerLink]="['/admin/usuarios']" style="text-decoration: none; color: inherit;">
+            <div class="icon-container">
+              <img src="assets/icono-usuarios.svg" alt="Usuarios" />
+            </div>
+            <span>Gestión Usuarios</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+
+  <main class="main-content">
+    <div class="eliminar-container">
+      <h2 class="titulo">Eliminar Usuario</h2>
+      
+      <div class="busqueda-seccion">
+        <p class="descripcion">Busca el usuario que deseas eliminar:</p>
+        <div class="busqueda-box">
+          <input 
+            type="text" 
+            placeholder="Buscar por nombre, correo o ID..." 
+            [(ngModel)]="terminoBusqueda"
+            (keyup.enter)="buscarUsuarios()"
+          />
+          <button class="btn-buscar" (click)="buscarUsuarios()">
+            <i class="fas fa-search"></i> Buscar
+          </button>
+        </div>
+      </div>
+      
+      <div class="resultados" *ngIf="usuarios.length > 0">
+        <h3>Resultados de la búsqueda ({{ usuarios.length }})</h3>
+        
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Correo</th>
+                <th>Tipo</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let usuario of usuarios">
+                <td>{{ usuario.id_usuario || usuario.id || 'Sin ID' }}</td>
+                <td>{{ usuario.nombre }} {{ usuario.apellido || '' }}</td>
+                <td>{{ usuario.correo_electronico || usuario.correo }}</td>
+                <td>{{ getTipoUsuario(usuario.id_rol || usuario.rol_id) }}</td>
+                <td>
+                  <button class="btn-eliminar" (click)="confirmarEliminar(usuario)">
+                    <i class="fas fa-trash"></i> Eliminar
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+      <div class="confirmacion-modal" *ngIf="usuarioAEliminar">
+        <div class="modal-content">
+          <h3>¿Estás seguro?</h3>
+          <p>Vas a eliminar al usuario: <strong>{{ usuarioAEliminar.nombre }} {{ usuarioAEliminar.apellido || '' }}</strong></p>
+          <p>ID: <strong>{{ usuarioAEliminar.id_usuario || usuarioAEliminar.id || 'Sin ID' }}</strong></p>
+          <p>Esta acción no se puede deshacer.</p>
+          
+          <div class="modal-buttons">
+            <button class="btn-cancelar" (click)="cancelarEliminar()">Cancelar</button>
+            <button class="btn-confirmar" (click)="eliminarUsuario()">Confirmar eliminación</button>
+          </div>
+        </div>
+      </div>
+      
+      <div class="mensaje-exito" *ngIf="mensajeExito">
+        <p><i class="fas fa-check-circle"></i> {{ mensajeExito }}</p>
+      </div>
+      
+      <div class="mensaje-error" *ngIf="mensajeError">
+        <p><i class="fas fa-exclamation-circle"></i> {{ mensajeError }}</p>
+      </div>
+      
+      <div class="no-resultados" *ngIf="busquedaRealizada && usuarios.length === 0">
+        <p>No se encontraron usuarios que coincidan con tu búsqueda.</p>
+      </div>
+      
+      <div class="botones-navegacion">
+        <button class="btn-volver" [routerLink]="['/admin/usuarios']">
+          Volver a Gestión de Usuarios
+        </button>
+      </div>
+    </div>
+  </main>
+</div>

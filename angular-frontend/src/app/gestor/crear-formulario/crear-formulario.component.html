@@ -1,0 +1,209 @@
+<div class="gestor-layout">
+  <!-- Sidebar (reutilizado del panel principal) -->
+  <aside class="sidebar">
+    <div class="logo-container">
+      <img src="assets/logo_ucentral.png" alt="Logo Universidad Central" class="logo" />
+      <h1 class="app-title">APP UCENTRAL</h1>
+      <div class="menu-dots">•••</div>
+    </div>
+    
+    <nav class="side-menu">
+      <ul>
+        <li class="menu-item">
+          <a [routerLink]="['/gestor']" style="text-decoration: none; color: inherit;">
+            <div class="icon-container">
+              <img src="assets/icono-dashboard.svg" alt="Dashboard" />
+            </div>
+            <span>Dashboard</span>
+          </a>
+        </li>
+        
+        <li class="menu-item">
+          <a [routerLink]="['/gestor/estudiantes']" style="text-decoration: none; color: inherit;">
+            <div class="icon-container">
+              <img src="assets/icono-estudiantes.svg" alt="Estudiantes" />
+            </div>
+            <span>Estudiantes</span>
+          </a>
+        </li>
+        <li class="menu-item active">
+          <a [routerLink]="['/gestor/formularios']" style="text-decoration: none; color: inherit;">
+            <div class="icon-container">
+              <img src="assets/icono-formularios.svg" alt="Formularios" />
+            </div>
+            <span>Formularios</span>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a [routerLink]="['/gestor/reportes']" style="text-decoration: none; color: inherit;">
+            <div class="icon-container">
+              <img src="assets/icono-reportes.svg" alt="Reportes" />
+            </div>
+            <span>Reportes</span>
+          </a>
+        </li>
+        <li class="menu-item">
+          <a [routerLink]="['/gestor/mensajes']" style="text-decoration: none; color: inherit;">
+            <div class="icon-container">
+              <img src="assets/icono-mensajes.svg" alt="Mensajes" />
+            </div>
+            <span>Mensajes</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <div class="sidebar-footer">
+      <button class="logout-btn">
+        <i class="fas fa-sign-out-alt"></i> Cerrar sesión
+      </button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+    <header class="page-header">
+      <div class="header-content">
+        <div class="go-back">
+          <a [routerLink]="['/gestor/formularios']" class="back-button">
+            <i class="fas fa-arrow-left"></i>
+          </a>
+          <h1>Creación de Formulario</h1>
+        </div>
+        <div class="header-actions">
+          <button class="save-btn" (click)="guardarFormulario()" [disabled]="enviando">
+            <i class="fas fa-save"></i> Guardar formulario
+          </button>
+          <button class="cancel-btn" (click)="cancelar()">
+            <i class="fas fa-times"></i> Cancelar
+          </button>
+        </div>
+      </div>
+    </header>
+
+    <!-- Mensajes de alerta -->
+    <div class="alert alert-success" *ngIf="exito">
+      Formulario guardado correctamente. Redirigiendo...
+    </div>
+    
+    <div class="alert alert-error" *ngIf="error">
+      {{ error }}
+    </div>
+
+    <!-- Contenido del formulario -->
+    <div class="form-container">
+      <form [formGroup]="formularioForm">
+        <div class="form-section">
+          <div class="form-header">
+            <h2>CREACIÓN FORMULARIO</h2>
+            <p>Diseña un nuevo formulario para recopilar información sobre deserción estudiantil.</p>
+          </div>
+
+          <!-- Información básica del formulario -->
+          <div class="form-basic-info">
+            <div class="form-group">
+              <label for="nombre">Nombre del formulario</label>
+              <input type="text" id="nombre" formControlName="nombre" class="form-control">
+              <div class="error-message" *ngIf="formularioForm.get('nombre')?.invalid && formularioForm.get('nombre')?.touched">
+                El nombre del formulario es obligatorio
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="descripcion">Descripción</label>
+              <textarea id="descripcion" formControlName="descripcion" class="form-control" rows="3"></textarea>
+            </div>
+            
+            <div class="form-group">
+              <label class="checkbox-label">
+                <input type="checkbox" formControlName="activo">
+                <span>Formulario activo (disponible para estudiantes)</span>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        <!-- Sección de preguntas -->
+        <div class="questions-section" formArrayName="preguntas">
+          <div class="section-header">
+            <h2>Preguntas del formulario</h2>
+            <button type="button" class="add-btn" (click)="agregarPregunta()">
+              <i class="fas fa-plus"></i> Añadir pregunta
+            </button>
+          </div>
+
+          <div class="question-list">
+            <div class="question-card" *ngFor="let pregunta of preguntas.controls; let i = index" [formGroupName]="i">
+              <div class="question-header">
+                <h3>Pregunta {{ i + 1 }}</h3>
+                <button type="button" class="remove-btn" (click)="eliminarPregunta(i)" *ngIf="preguntas.length > 1">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+
+              <div class="form-group">
+                <label [for]="'pregunta-texto-' + i">Texto de la pregunta</label>
+                <input type="text" [id]="'pregunta-texto-' + i" formControlName="textoPregunta" class="form-control">
+                <div class="error-message" *ngIf="pregunta.get('textoPregunta')?.invalid && pregunta.get('textoPregunta')?.touched">
+                  El texto de la pregunta es obligatorio
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label [for]="'pregunta-tipo-' + i">Tipo de pregunta</label>
+                <select [id]="'pregunta-tipo-' + i" formControlName="tipoPregunta" class="form-control" (change)="cambioTipoPregunta(i)">
+                  <option *ngFor="let tipo of tiposDePregunta" [value]="tipo.id">{{ tipo.nombre }}</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label [for]="'pregunta-categoria-' + i">Categoría</label>
+                <select [id]="'pregunta-categoria-' + i" formControlName="categoria" class="form-control">
+                  <option value="academico">Académico</option>
+                  <option value="personal">Personal</option>
+                  <option value="familiar">Familiar</option>
+                  <option value="economico">Económico</option>
+                  <option value="institucional">Institucional</option>
+                </select>
+              </div>
+
+              <div class="form-group">
+                <label class="checkbox-label">
+                  <input type="checkbox" formControlName="obligatoria">
+                  <span>Pregunta obligatoria</span>
+                </label>
+              </div>
+
+              <!-- Opciones para preguntas de selección -->
+              <div class="options-container" *ngIf="['opciones_multiple', 'opcion', 'opcion_unica', 'desplegable'].includes(pregunta.get('tipoPregunta')?.value)" formArrayName="opciones">
+                <div class="options-header">
+                  <h4>Opciones de respuesta</h4>
+                  <button type="button" class="add-option-btn" (click)="agregarOpcion(i)">
+                    <i class="fas fa-plus"></i> Añadir opción
+                  </button>
+                </div>
+
+                <div class="option-item" *ngFor="let opcion of getOpciones(i).controls; let j = index" [formGroupName]="j">
+                  <div class="form-group">
+                    <input type="text" formControlName="textoOpcion" class="form-control option-text" placeholder="Texto de la opción">
+                    <button type="button" class="remove-option-btn" (click)="eliminarOpcion(i, j)" *ngIf="getOpciones(i).length > 1">
+                      <i class="fas fa-times"></i>
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Botones de acción -->
+        <div class="form-actions">
+          <button type="button" class="cancel-btn" (click)="cancelar()">Cancelar</button>
+          <button type="button" class="save-btn" (click)="guardarFormulario()" [disabled]="enviando">
+            <span *ngIf="!enviando">Guardar formulario</span>
+            <span *ngIf="enviando">Guardando...</span>
+          </button>
+        </div>
+      </form>
+    </div>
+  </main>
+</div>

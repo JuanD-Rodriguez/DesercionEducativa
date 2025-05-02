@@ -1,0 +1,32 @@
+<!-- src/app/auth/login/login.component.html -->
+<div class="login-wrapper">
+  <div class="login-box">
+    <div class="login-left">
+      <h2>Iniciar Sesión</h2>
+      
+      <label for="username">Usuario</label>
+      <input type="text" id="username" name="username" [(ngModel)]="nombre_usuario" required [disabled]="cargando">
+      
+      <label for="password">Contraseña</label>
+      <input type="password" id="password" name="password" [(ngModel)]="contrasena" required [disabled]="cargando">
+      
+      <button type="submit" (click)="iniciarSesion()" [disabled]="cargando">
+        <span *ngIf="!cargando">Iniciar Sesión</span>
+        <span *ngIf="cargando">Cargando...</span>
+      </button>
+      
+      <a href="#" class="forgot-password" [routerLink]="['/recuperar']">¿Olvidaste tu contraseña?</a>
+      
+      <p *ngIf="error" class="error">{{ error }}</p>
+    </div>
+    <div class="login-right">
+      <div class="logo-container">
+        <img src="assets/logo_ucentral.png" alt="Universidad Central" class="logo" />
+        <div class="university-name">
+          <h1>UNIVERSIDAD<br>CENTRAL</h1>
+          <p>Vigilada Mineducación</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

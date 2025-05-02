@@ -1,0 +1,24 @@
+<div class="login-wrapper">
+  <div class="login-box">
+    <div class="login-left">
+      <p class="instruccion">Introduce la dirección de correo electrónico de tu cuenta de Universidad Central para recibir un código de seguridad.</p>
+      
+      <label for="correo">Dirección de correo electrónico</label>
+      <input type="email" id="correo" name="correo" placeholder="Value" [(ngModel)]="correo" required>
+      
+      <button type="submit" (click)="enviarCodigo()">Continuar</button>
+      
+      <p *ngIf="mensaje" class="mensaje-exito">{{ mensaje }}</p>
+      <p *ngIf="error" class="mensaje-error">{{ error }}</p>
+    </div>
+    <div class="login-right">
+      <div class="logo-container">
+        <img src="assets/logo_ucentral.png" alt="Universidad Central" class="logo" />
+        <div class="university-name">
+          <h1>UNIVERSIDAD<br>CENTRAL</h1>
+          <p>Vigilada Mineducación</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

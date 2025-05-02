@@ -1,0 +1,17 @@
+{
+  "name": "Angular Frontend",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "workspaceFolder": "/app",
+  "settings": {
+    "terminal.integrated.shell.linux": "/bin/bash"
+  },
+  "extensions": [
+    "angular.ng-template",
+    "esbenp.prettier-vscode"
+  ],
+  "forwardPorts": [4200],
+  "postCreateCommand": "npm install"
+}

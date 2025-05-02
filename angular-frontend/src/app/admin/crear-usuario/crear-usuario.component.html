@@ -1,0 +1,117 @@
+<div class="admin-layout">
+  <aside class="sidebar">
+    <div class="logo-container">
+      <img src="assets/logo_ucentral.png" alt="Logo Universidad Central" class="logo" />
+      <h1 class="app-title">APP UCENTRAL</h1>
+      <div class="menu-dots">•••</div>
+    </div>
+    
+    <nav class="side-menu">
+      <ul>
+        <li class="menu-item">
+          <div class="icon-container">
+            <img src="assets/icono-reportes.svg" alt="Reportes" />
+          </div>
+          <span>Reportes</span>
+        </li>
+        <li class="menu-item">
+          <a [routerLink]="['/admin/usuarios']" class="menu-link">
+            <div class="icon-container">
+              <img src="assets/icono-usuarios.svg" alt="Usuarios" />
+            </div>
+            <span>Gestión Usuarios</span>
+          </a>
+        </li>
+      </ul>
+    </nav>
+  </aside>
+        
+  <!-- Contenido principal -->
+  <div class="crear-usuario-content">
+    <div class="contenedor-principal">
+      <div class="formulario-crear-usuario">
+        <h2 class="titulo-formulario">Registrar Nuevo Estudiante</h2>
+        
+        <div *ngIf="errorMessage" class="error-banner">
+          {{ errorMessage }}
+        </div>
+        
+        <form [formGroup]="usuarioForm" (ngSubmit)="onSubmit()">
+          <div class="campo">
+            <label for="nombre">Nombre:</label>
+            <input type="text" id="nombre" formControlName="nombre" />
+            <div *ngIf="nombreControl?.invalid && nombreControl?.touched" class="error-mensaje">
+              <span *ngIf="nombreControl?.errors?.['required']">El nombre es obligatorio</span>
+              <span *ngIf="nombreControl?.errors?.['minlength']">El nombre debe tener al menos 2 caracteres</span>
+            </div>
+          </div>
+
+          <div class="campo">
+            <label for="apellidos">Apellidos:</label>
+            <input type="text" id="apellidos" formControlName="apellidos" />
+            <div *ngIf="apellidosControl?.invalid && apellidosControl?.touched" class="error-mensaje">
+              <span *ngIf="apellidosControl?.errors?.['required']">Los apellidos son obligatorios</span>
+              <span *ngIf="apellidosControl?.errors?.['minlength']">Los apellidos deben tener al menos 2 caracteres</span>
+            </div>
+          </div>
+
+          <div class="campo">
+            <label for="correo">Correo Electrónico:</label>
+            <input type="email" id="correo" formControlName="correo" />
+            <div *ngIf="correoControl?.invalid && correoControl?.touched" class="error-mensaje">
+              <span *ngIf="correoControl?.errors?.['required']">El correo es obligatorio</span>
+              <span *ngIf="correoControl?.errors?.['email'] || correoControl?.errors?.['pattern']">Ingrese un correo electrónico válido</span>
+            </div>
+          </div>
+
+          <div class="campo">
+            <label for="telefono">Teléfono:</label>
+            <input type="text" id="telefono" formControlName="telefono" />
+            <div *ngIf="telefonoControl?.invalid && telefonoControl?.touched" class="error-mensaje">
+              <span *ngIf="telefonoControl?.errors?.['required']">El teléfono es obligatorio</span>
+              <span *ngIf="telefonoControl?.errors?.['pattern']">El teléfono debe tener 10 dígitos</span>
+            </div>
+          </div>
+
+          <div class="campo">
+            <label for="id_ingenieria">Ingeniería:</label>
+            <select id="id_ingenieria" formControlName="id_ingenieria">
+              <option value="">Seleccione una ingeniería</option>
+              <option *ngFor="let ing of ingenierias" [value]="ing.id_ingenieria">
+                {{ing.nombre_ingenieria}}
+              </option>
+            </select>
+            <div *ngIf="ingenieriaControl?.invalid && ingenieriaControl?.touched" class="error-mensaje">
+              <span *ngIf="ingenieriaControl?.errors?.['required']">Debe seleccionar una ingeniería</span>
+            </div>
+            <div *ngIf="cargandoIngenierias" class="loading-text">Cargando ingenierías...</div>
+          </div>
+
+          <div class="campo">
+            <label for="contrasena">Contraseña:</label>
+            <input type="password" id="contrasena" formControlName="contrasena" />
+            <div *ngIf="contrasenaControl?.invalid && contrasenaControl?.touched" class="error-mensaje">
+              <span *ngIf="contrasenaControl?.errors?.['required']">La contraseña es obligatoria</span>
+              <span *ngIf="contrasenaControl?.errors?.['minlength']">La contraseña debe tener al menos 8 caracteres</span>
+            </div>
+            <small class="helper-text">La contraseña debe tener al menos 8 caracteres</small>
+          </div>
+
+          <div class="campo">
+            <label for="fecha_registro">Fecha Registro:</label>
+            <input type="date" id="fecha_registro" formControlName="fecha_registro" />
+          </div>
+
+          <button type="submit" [disabled]="usuarioForm.invalid || enviando">
+            <span *ngIf="!enviando">Registrar Usuario</span>
+            <span *ngIf="enviando">Procesando...</span>
+          </button>
+        </form>
+      </div>
+
+      <div class="icono-usuario">
+        <img src="assets/img/user-icon.svg" alt="Icono usuario" />
+      </div>
+    </div>
+  </div>
+</div>

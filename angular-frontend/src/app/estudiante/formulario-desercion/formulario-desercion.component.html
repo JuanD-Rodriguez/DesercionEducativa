@@ -1,0 +1,52 @@
+<div class="estudiante-layout">
+  <h2 class="formulario-titulo">Formulario de Deserción</h2>
+  
+  <div class="formulario-descripcion">
+    <p>Este formulario nos ayudará a comprender mejor los motivos por los cuales consideras abandonar tus estudios. Tus respuestas son confidenciales y nos ayudarán a mejorar nuestros servicios y apoyarte en lo que necesites.</p>
+  </div>
+
+  <form [formGroup]="formulario" (ngSubmit)="enviarFormulario()" *ngIf="!enviado">
+    <div formArrayName="respuestas">
+      <div *ngFor="let grupo of respuestas.controls; let i = index" [formGroupName]="i" class="pregunta-container">
+        <h3 class="pregunta-texto">{{ grupo.get('texto')?.value }}</h3>
+        <div class="opciones-container">
+          <label class="opcion">
+            <input type="radio" formControlName="respuesta" value="Totalmente de acuerdo">
+            Totalmente de acuerdo
+          </label>
+          <label class="opcion">
+            <input type="radio" formControlName="respuesta" value="De acuerdo">
+            De acuerdo
+          </label>
+          <label class="opcion">
+            <input type="radio" formControlName="respuesta" value="Neutral">
+            Neutral
+          </label>
+          <label class="opcion">
+            <input type="radio" formControlName="respuesta" value="En desacuerdo">
+            En desacuerdo
+          </label>
+          <label class="opcion">
+            <input type="radio" formControlName="respuesta" value="Totalmente en desacuerdo">
+            Totalmente en desacuerdo
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="texto-adicional">
+      <label for="comentarios">Comentarios adicionales (opcional):</label>
+      <textarea id="comentarios" rows="4" placeholder="Si deseas, puedes añadir información adicional sobre tu situación..."></textarea>
+    </div>
+
+    <div class="botones-container">
+      <button type="submit" class="btn-enviar" [disabled]="formulario.invalid">Enviar Formulario</button>
+    </div>
+  </form>
+
+  <div class="mensaje-exito" *ngIf="enviado">
+    <h3>¡Formulario enviado exitosamente!</h3>
+    <p>Gracias por completar el formulario. Un gestor académico revisará tu información y se pondrá en contacto contigo pronto.</p>
+    <button (click)="volver()" class="btn-volver">Volver al inicio</button>
+  </div>
+</div>
