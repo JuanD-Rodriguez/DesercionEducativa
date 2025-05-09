@@ -39,7 +39,7 @@ def create_app(config=None):
         from app.routes.usuarios import usuarios_bp
         from app.routes.cursos import cursos_bp
         from app.routes.cortes import cortes_bp
-        from app.routes.comunicacion import comunicacion_bp
+        #from app.routes.comunicacion import comunicacion_bp
         from app.routes.reportes import reportes_bp
         from app.routes.formulario import formulario_bp
         from app.routes.prediccion import prediccion_bp
@@ -51,7 +51,7 @@ def create_app(config=None):
         app.register_blueprint(usuarios_bp, url_prefix='/usuarios')
         app.register_blueprint(cursos_bp, url_prefix='/cursos')
         app.register_blueprint(cortes_bp, url_prefix='/cortes')
-        app.register_blueprint(comunicacion_bp, url_prefix='/comunicacion')
+        #app.register_blueprint(comunicacion_bp, url_prefix='/comunicacion')
         app.register_blueprint(reportes_bp, url_prefix='/reportes')
         app.register_blueprint(formulario_bp, url_prefix='/formulario')
         app.register_blueprint(prediccion_bp, url_prefix='/prediccion')

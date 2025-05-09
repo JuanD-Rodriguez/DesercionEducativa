@@ -8,7 +8,8 @@ Set-Location -Path "$PSScriptRoot"
 docker-compose down
 
 #Ejecutar docker compose con build sin cache
-docker-compose build --no-cache
-docker-compose up
+
+#docker-compose build --no-cache
+#docker-compose up
 #Ejecutar Docker Compose con build
-#docker-compose up --build
+docker-compose up --build
