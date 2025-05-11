@@ -10,4 +10,4 @@ class Gestor(db.Model):
     telefono = db.Column(db.String(20))
 
     usuario = db.relationship('Usuario', back_populates='gestor')
-    formularios = db.relationship('FormularioDesercion', back_populates='gestor')
+  #  formularios = db.relationship('FormularioDesercion', back_populates='gestor')

@@ -8,5 +8,5 @@ class Pregunta(db.Model):
     texto_pregunta = db.Column(db.String(255))
     categoria = db.Column(db.String(50))
 
-    formulario = db.relationship('FormularioDesercion', back_populates='preguntas')
+    #formulario = db.relationship('FormularioDesercion', back_populates='preguntas')
     respuestas = db.relationship('Respuesta', back_populates='pregunta')

@@ -1,3 +1,4 @@
+// src/app/core/services/formulario.service.ts
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
@@ -8,115 +9,81 @@ import { Observable } from 'rxjs';
 export class FormularioService {
   private apiUrl = 'http://localhost:5000/formulario';
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
-  /**
-   * Obtiene todos los formularios
-   * @returns Observable con la lista de formularios
-   */
-  obtenerFormularios(): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/formularios`);
-  }
-
-  /**
-   * Obtiene un formulario específico por su ID
-   * @param id ID del formulario
-   * @returns Observable con el detalle del formulario
-   */
-  obtenerFormulario(id: number): Observable<any> {
-    return this.http.get<any>(`${this.apiUrl}/formularios/${id}`);
-  }
-
-  /**
-   * Crea un nuevo formulario
-   * @param formulario Datos del formulario a crear
-   * @returns Observable con la respuesta del servidor
-   */
   crearFormulario(formulario: any): Observable<any> {
-    return new Observable(observer => {
-      // Datos absolutamente mínimos
-      const datos = {
-        titulo: "Test",
-        preguntas: [{
-          texto: "Test",
-          categoria: "academico"
-        }]
-      };
-      
-      // Usar Fetch API para evitar problemas con HttpClient
-      const token = localStorage.getItem('token');
-      
-      fetch('http://localhost:5000/formulario/crear', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`
-        },
-        body: JSON.stringify(datos)
-      })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(`Error HTTP: ${response.status}`);
-        }
-        return response.json();
-      })
-      .then(data => {
-        observer.next(data);
-        observer.complete();
-      })
-      .catch(error => {
-        console.error('Error en fetch:', error);
-        observer.error(error);
-      });
+    const token = localStorage.getItem('token');
+    
+    // Usar estructura_json directamente si ya viene del componente
+    const payload = {
+      titulo: formulario.titulo,
+      descripcion: formulario.descripcion,
+      estructura_json: formulario.estructura_json
+    };
+
+    console.log('Payload enviado al backend:', payload);
+
+    return this.http.post(`${this.apiUrl}/crear`, payload, {
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
     });
   }
-  /**
-   * Elimina un formulario
-   * @param id ID del formulario a eliminar
-   * @returns Observable con la respuesta del servidor
-   */
+
+  obtenerFormularios(): Observable<any[]> {
+    const token = localStorage.getItem('token');
+    return this.http.get<any[]>(`${this.apiUrl}/formularios`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+  }
+
+  obtenerFormulario(id: number): Observable<any> {
+    const token = localStorage.getItem('token');
+    const headers = new HttpHeaders({
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${token}`
+    });
+    return this.http.get<any>(`${this.apiUrl}/formularios/${id}`, { headers });
+  }
+
+  getPreguntas(id_formulario: number): Observable<any[]> {
+    const token = localStorage.getItem('token');
+    return this.http.get<any[]>(`${this.apiUrl}/${id_formulario}/preguntas`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+  }
+
+  enviarRespuestas(id_formulario: number, respuestas: any): Observable<any> {
+    const token = localStorage.getItem('token');
+    return this.http.post(`${this.apiUrl}/${id_formulario}/responder`, {
+      respuestas_json: respuestas
+    }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+  }
+
   eliminarFormulario(id: number): Observable<any> {
-    return this.http.delete<any>(`${this.apiUrl}/formularios/${id}`);
+    const token = localStorage.getItem('token');
+    return this.http.delete(`${this.apiUrl}/${id}/eliminar`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
   }
 
-  /**
-   * Activa o desactiva un formulario
-   * @param id ID del formulario
-   * @param estado Nuevo estado (true = activo, false = inactivo)
-   * @returns Observable con la respuesta del servidor
-   */
-  cambiarEstado(id: number, estado: boolean): Observable<any> {
-    return this.http.put<any>(`${this.apiUrl}/formularios/${id}/estado`, { activo: estado });
-  }
-
-  /**
-   * Obtiene las preguntas de un formulario
-   * @param idFormulario ID del formulario (opcional)
-   * @returns Observable con las preguntas
-   */
-  getPreguntas(idFormulario?: number): Observable<any[]> {
-    let url = `${this.apiUrl}/preguntas`;
-    if (idFormulario) {
-      url += `?id_formulario=${idFormulario}`;
-    }
-    return this.http.get<any[]>(url);
-  }
-
-  /**
-   * Envía las respuestas de un estudiante a un formulario
-   * @param respuestas Respuestas del estudiante
-   * @returns Observable con la respuesta del servidor
-   */
-  enviarRespuestas(respuestas: any): Observable<any> {
-    return this.http.post<any>(`${this.apiUrl}/respuestas`, { respuestas });
-  }
-  
-  /**
-   * Obtiene las respuestas de un formulario
-   * @param id ID del formulario
-   * @returns Observable con las respuestas del formulario
-   */
-  obtenerRespuestas(id: number): Observable<any[]> {
-    return this.http.get<any[]>(`${this.apiUrl}/respuestas/formulario/${id}`);
+  cambiarEstado(id: number, nuevoEstado: string): Observable<any> {
+    const token = localStorage.getItem('token');
+    return this.http.put(`${this.apiUrl}/${id}/estado`, { estado: nuevoEstado }, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
   }
 }

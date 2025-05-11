@@ -1,5 +1,6 @@
+// src/app/gestor/ver-formulario/ver-formulario.component.ts
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { FormularioService } from 'src/app/core/services/formulario.service';
 
 @Component({
@@ -8,153 +9,96 @@ import { FormularioService } from 'src/app/core/services/formulario.service';
   styleUrls: ['./ver-formulario.component.css']
 })
 export class VerFormularioComponent implements OnInit {
+  id: number = 0;
+  formularioActual: any;
   formularios: any[] = [];
-  formularioActual: any = null;
-  idFormulario: number | null = null;
-  
-  // Estados de carga
-  cargandoFormularios = true;
-  cargandoDetalle = false;
-  error = '';
-  
-  // Estado de vista
-  modoLista = true;
+  modoLista: boolean = true;
+  error: string = '';
+  cargandoFormularios: boolean = false;
+  cargandoDetalle: boolean = false;
 
   constructor(
-    private formularioService: FormularioService,
     private route: ActivatedRoute,
-    private router: Router
-  ) { }
+    private formularioService: FormularioService
+  ) {}
 
   ngOnInit(): void {
-    // Verificar si se está solicitando un formulario específico
-    this.route.params.subscribe(params => {
-      if (params['id']) {
-        this.idFormulario = +params['id'];
-        this.modoLista = false;
-        this.cargarDetalleFormulario(this.idFormulario);
-      } else {
-        this.modoLista = true;
-        this.cargarFormularios();
-      }
-    });
+    this.id = Number(this.route.snapshot.paramMap.get('id'));
+    if (this.id) {
+      this.modoLista = false;
+      this.cargarDetalleFormulario();
+    } else {
+      this.cargarFormularios();
+    }
   }
 
   cargarFormularios(): void {
     this.cargandoFormularios = true;
     this.formularioService.obtenerFormularios().subscribe({
-      next: (data) => {
+      next: data => {
         this.formularios = data;
         this.cargandoFormularios = false;
       },
-      error: (error) => {
-        console.error('Error al cargar formularios:', error);
-        this.error = 'Error al cargar los formularios. Por favor, intenta nuevamente.';
+      error: err => {
+        this.error = 'Error al cargar formularios';
         this.cargandoFormularios = false;
       }
     });
   }
 
-  cargarDetalleFormulario(id: number): void {
+  cargarDetalleFormulario(): void {
     this.cargandoDetalle = true;
-    this.formularioService.obtenerFormulario(id).subscribe({
-      next: (data) => {
+    this.formularioService.obtenerFormulario(this.id).subscribe({
+      next: data => {
         this.formularioActual = data;
         this.cargandoDetalle = false;
       },
-      error: (error) => {
-        console.error(`Error al cargar el formulario con ID ${id}:`, error);
-        this.error = 'Error al cargar el detalle del formulario. Por favor, intenta nuevamente.';
+      error: err => {
+        this.error = 'No se pudo cargar el formulario';
         this.cargandoDetalle = false;
       }
     });
   }
 
   verFormulario(id: number): void {
-    this.router.navigate(['/gestor/formularios/ver', id]);
+    this.id = id;
+    this.modoLista = false;
+    this.cargarDetalleFormulario();
+  }
+
+  volverALista(): void {
+    this.modoLista = true;
+    this.id = 0;
+    this.formularioActual = null;
+    this.cargarFormularios();
   }
 
   editarFormulario(id: number): void {
-    this.router.navigate(['/gestor/formularios/editar', id]);
+    // Lógica de navegación a la edición
+    console.log('Editar formulario', id);
+  }
+
+  verMetricas(id: number): void {
+    // Lógica de navegación a métricas
+    console.log('Ver métricas del formulario', id);
   }
 
   duplicarFormulario(id: number): void {
-    this.cargandoDetalle = true;
-    this.formularioService.obtenerFormulario(id).subscribe({
-      next: (data) => {
-        // Crear una copia del formulario
-        const formularioDuplicado = { ...data };
-        // Cambiar nombre para indicar que es una copia
-        formularioDuplicado.nombre = `Copia de ${formularioDuplicado.nombre}`;
-        // Eliminar ID para crear uno nuevo
-        delete formularioDuplicado.id_formulario;
-        delete formularioDuplicado.fecha_creacion;
-        
-        this.formularioService.crearFormulario(formularioDuplicado).subscribe({
-          next: (response) => {
-            this.cargarFormularios();
-            this.cargandoDetalle = false;
-          },
-          error: (error) => {
-            console.error('Error al duplicar el formulario:', error);
-            this.error = 'Error al duplicar el formulario. Por favor, intenta nuevamente.';
-            this.cargandoDetalle = false;
-          }
-        });
-      },
-      error: (error) => {
-        console.error(`Error al obtener el formulario para duplicar:`, error);
-        this.error = 'Error al duplicar el formulario. Por favor, intenta nuevamente.';
-        this.cargandoDetalle = false;
-      }
+    console.log('Duplicar formulario', id);
+  }
+
+  cambiarEstadoFormulario(id: number, nuevoEstado: boolean): void {
+    const estadoStr = nuevoEstado ? 'activo' : 'inactivo';
+    this.formularioService.cambiarEstado(id, estadoStr).subscribe({
+      next: () => this.cargarFormularios(),
+      error: () => this.error = 'No se pudo cambiar el estado'
     });
   }
 
   eliminarFormulario(id: number): void {
-    if (confirm('¿Estás seguro de que deseas eliminar este formulario? Esta acción no se puede deshacer.')) {
-      this.formularioService.eliminarFormulario(id).subscribe({
-        next: () => {
-          // Si estamos viendo el detalle de este formulario, volver a la lista
-          if (this.idFormulario === id) {
-            this.router.navigate(['/gestor/formularios/ver']);
-          } else {
-            this.cargarFormularios();
-          }
-        },
-        error: (error) => {
-          console.error('Error al eliminar el formulario:', error);
-          this.error = 'Error al eliminar el formulario. Por favor, intenta nuevamente.';
-        }
-      });
-    }
-  }
-
-  cambiarEstadoFormulario(id: number, nuevoEstado: boolean): void {
-    this.formularioService.cambiarEstado(id, nuevoEstado).subscribe({
-      next: () => {
-        // Actualizar estado en la lista local
-        const formulario = this.formularios.find(f => f.id_formulario === id);
-        if (formulario) {
-          formulario.activo = nuevoEstado;
-        }
-        
-        // Si estamos viendo el detalle, actualizar también allí
-        if (this.formularioActual && this.formularioActual.id_formulario === id) {
-          this.formularioActual.activo = nuevoEstado;
-        }
-      },
-      error: (error) => {
-        console.error('Error al cambiar el estado del formulario:', error);
-        this.error = 'Error al cambiar el estado del formulario. Por favor, intenta nuevamente.';
-      }
+    this.formularioService.eliminarFormulario(id).subscribe({
+      next: () => this.cargarFormularios(),
+      error: () => this.error = 'No se pudo eliminar el formulario'
     });
-  }
-
-  volverALista(): void {
-    this.router.navigate(['/gestor/formularios/ver']);
-  }
-
-  verMetricas(id: number): void {
-    this.router.navigate(['/gestor/formularios/metricas', id]);
   }
 }
