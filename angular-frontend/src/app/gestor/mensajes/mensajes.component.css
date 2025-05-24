@@ -366,4 +366,10 @@
       margin-top: 15px;
       justify-content: flex-end;
     }
+    .icon-container img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
   }
