@@ -1,4 +1,3 @@
-# app/__init__.py
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS
@@ -29,35 +28,44 @@ def create_app(config=None):
     CORS(app, resources={r"/*": {"origins": "*"}}, methods=["GET", "POST", "PUT", "DELETE", "OPTIONS"], allow_headers=["Content-Type", "Authorization"])
 
     with app.app_context():
+        # Importar blueprints
         from app.routes.main import main
         from app.routes.auth import auth_bp
         from app.routes.usuarios import usuarios_bp
         from app.routes.cursos import cursos_bp
         from app.routes.cortes import cortes_bp
-        # from app.routes.comunicacion import comunicacion_bp
+        from app.routes.ingenierias import ingenieria_bp
         from app.routes.reportes import reportes_bp
         from app.routes.formulario import formulario_bp
         from app.routes.prediccion import prediccion_bp
         from app.routes.talend_integration import talend_bp
+        # from app.routes.comunicacion import comunicacion_bp
 
+        # Registrar blueprints
         app.register_blueprint(main, url_prefix='/')
         app.register_blueprint(auth_bp, url_prefix='/auth')
         app.register_blueprint(usuarios_bp, url_prefix='/usuarios')
         app.register_blueprint(cursos_bp, url_prefix='/cursos')
         app.register_blueprint(cortes_bp, url_prefix='/cortes')
-        # app.register_blueprint(comunicacion_bp, url_prefix='/comunicacion')
+        app.register_blueprint(ingenieria_bp, url_prefix='/ingenierias')
         app.register_blueprint(reportes_bp, url_prefix='/reportes')
         app.register_blueprint(formulario_bp, url_prefix='/formulario')
         app.register_blueprint(prediccion_bp, url_prefix='/prediccion')
         app.register_blueprint(talend_bp, url_prefix='/talend')
+        # app.register_blueprint(comunicacion_bp, url_prefix='/comunicacion')
 
+        # Crear tablas
         db.create_all()
 
+        # Crear roles y usuarios iniciales
         from app.models.rol import Rol
         from app.models.usuario import Usuario
         from app.models.gestor import Gestor
+        from app.models.admin import Admin
+        from app.models.ingenieria import Ingenieria
         from werkzeug.security import generate_password_hash
 
+        # Crear roles si no existen
         admin_role = Rol.query.filter_by(id_rol=1).first()
         if not admin_role:
             admin_role = Rol(id_rol=1, nombre="Administrador")
@@ -73,6 +81,7 @@ def create_app(config=None):
             estudiante_role = Rol(id_rol=3, nombre="Estudiante")
             db.session.add(estudiante_role)
 
+        # Usuario administrador y perfil Admin
         admin_user = Usuario.query.filter_by(nombre_usuario="admin").first()
         if not admin_user:
             admin_user = Usuario(
@@ -81,11 +90,25 @@ def create_app(config=None):
                 id_rol=1
             )
             db.session.add(admin_user)
-            print("[✔] Usuario admin creado con éxito.")
+            db.session.flush()
+
+            admin_existente = Admin.query.filter_by(id_usuario=admin_user.id_usuario).first()
+            if not admin_existente:
+                nuevo_admin = Admin(id_usuario=admin_user.id_usuario)
+                db.session.add(nuevo_admin)
+                print("[✔] Usuario admin y perfil Admin creados con éxito.")
         else:
             admin_user.contrasena = generate_password_hash("admin123")
             print("[✔] Contraseña del usuario admin actualizada.")
 
+        # Crear ingeniería de ejemplo si no existe
+        ingenieria = Ingenieria.query.filter_by(nombre_ingenieria="Ingeniería de Sistemas").first()
+        if not ingenieria:
+            ingenieria = Ingenieria(nombre_ingenieria="Ingeniería de Sistemas")
+            db.session.add(ingenieria)
+            print("[✔] Ingeniería de ejemplo creada.")
+
+        # Usuario gestor y perfil Gestor
         gestor_user = Usuario.query.filter_by(nombre_usuario="gestor1").first()
         if not gestor_user:
             gestor_user = Usuario(
@@ -102,7 +125,7 @@ def create_app(config=None):
                 id_usuario=gestor_user.id_usuario
             )
             db.session.add(nuevo_gestor)
-            print("[✔] Usuario gestor1 y perfil Gestor creado con éxito.")
+            print("[✔] Usuario gestor1 y perfil Gestor creados con éxito.")
         else:
             gestor_user.contrasena = generate_password_hash("gestor123")
             print("[✔] Contraseña del usuario gestor1 actualizada.")
